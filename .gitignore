@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.env
+.env.local
+.env.production
+node.exe
+data/*.db
+data/*.db-shm
+data/*.db-wal
+server.err.log
+server.out.log
+npm-debug.log*

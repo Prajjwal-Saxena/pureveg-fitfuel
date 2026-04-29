@@ -1,0 +1,18 @@
+<svg width="640" height="420" viewBox="0 0 640 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="640" height="420" rx="28" fill="#FFF8EF"/>
+  <rect x="48" y="154" width="114" height="104" rx="24" fill="#C3F0D6"/>
+  <text x="76" y="204" fill="#18352D" font-size="24" font-family="Arial" font-weight="700">Source</text>
+  <text x="69" y="234" fill="#18352D" font-size="16" font-family="Arial">Farm fresh</text>
+  <path d="M162 206H248" stroke="#18352D" stroke-width="8" stroke-linecap="round"/>
+  <rect x="248" y="130" width="146" height="152" rx="24" fill="#FFD3BF"/>
+  <text x="274" y="184" fill="#18352D" font-size="24" font-family="Arial" font-weight="700">Cook</text>
+  <text x="274" y="214" fill="#18352D" font-size="16" font-family="Arial">8 AM / 12 PM</text>
+  <text x="274" y="238" fill="#18352D" font-size="16" font-family="Arial">4 PM / 8 PM</text>
+  <path d="M394 206H486" stroke="#18352D" stroke-width="8" stroke-linecap="round"/>
+  <rect x="486" y="154" width="106" height="104" rx="24" fill="#18352D"/>
+  <text x="505" y="204" fill="#FFF8EF" font-size="24" font-family="Arial" font-weight="700">Deliver</text>
+  <text x="499" y="234" fill="#D7ECE3" font-size="16" font-family="Arial">Within 60 min</text>
+  <circle cx="320" cy="70" r="28" fill="#EF6C2F"/>
+  <text x="301" y="79" fill="#FFF8EF" font-size="22" font-family="Arial" font-weight="700">4h</text>
+  <text x="229" y="338" fill="#18352D" font-size="28" font-family="Arial" font-weight="700">Freshness guarantee</text>
+</svg>

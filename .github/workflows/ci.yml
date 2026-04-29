@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+
+jobs:
+  build-and-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Create CI environment file
+        run: |
+          cat > .env <<'EOF'
+          PORT=3000
+          APP_BASE_URL=http://127.0.0.1:3000
+          FRONTEND_URL=http://127.0.0.1:5173
+          DB_PATH=./data/fitfuel.db
+          ADMIN_API_KEY=ci-admin-key
+          NODE_ENV=production
+          EOF
+
+      - name: Check environment
+        run: npm run check:env
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Start production server
+        run: |
+          npm start > server.log 2>&1 &
+          echo $! > server.pid
+
+      - name: Wait for health endpoint
+        run: |
+          for i in {1..30}; do
+            if curl -fsS http://127.0.0.1:3000/api/health > /dev/null; then
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Server did not become healthy in time"
+          cat server.log
+          exit 1
+
+      - name: Run smoke test
+        run: npm run smoke
+
+      - name: Stop server
+        if: always()
+        run: |
+          if [ -f server.pid ]; then
+            kill "$(cat server.pid)" || true
+          fi
+
+      - name: Upload server log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-log
+          path: server.log

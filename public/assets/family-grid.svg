@@ -1,0 +1,16 @@
+<svg width="640" height="420" viewBox="0 0 640 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="640" height="420" rx="28" fill="#FFF8EF"/>
+  <rect x="54" y="74" width="138" height="118" rx="24" fill="#FFD3BF"/>
+  <text x="98" y="138" fill="#18352D" font-size="24" font-family="Arial" font-weight="700">Gym</text>
+  <rect x="250" y="74" width="138" height="118" rx="24" fill="#C3F0D6"/>
+  <text x="286" y="138" fill="#18352D" font-size="24" font-family="Arial" font-weight="700">Kids</text>
+  <rect x="446" y="74" width="138" height="118" rx="24" fill="#FFF0B8"/>
+  <text x="468" y="138" fill="#18352D" font-size="24" font-family="Arial" font-weight="700">Seniors</text>
+  <rect x="152" y="228" width="138" height="118" rx="24" fill="#18352D"/>
+  <text x="183" y="292" fill="#FFF8EF" font-size="24" font-family="Arial" font-weight="700">Family</text>
+  <rect x="348" y="228" width="138" height="118" rx="24" fill="#EF6C2F"/>
+  <text x="364" y="292" fill="#FFF8EF" font-size="24" font-family="Arial" font-weight="700">Corporate</text>
+  <path d="M192 192L222 228" stroke="#18352D" stroke-width="8" stroke-linecap="round"/>
+  <path d="M388 192L418 228" stroke="#18352D" stroke-width="8" stroke-linecap="round"/>
+  <path d="M486 192L454 228" stroke="#18352D" stroke-width="8" stroke-linecap="round"/>
+</svg>

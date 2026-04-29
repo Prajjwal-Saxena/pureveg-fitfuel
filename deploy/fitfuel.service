@@ -1,0 +1,17 @@
+[Unit]
+Description=FitFuel Kitchen Application
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/fitfuel-kitchen
+Environment=NODE_ENV=production
+EnvironmentFile=/opt/fitfuel-kitchen/.env
+ExecStart=/usr/bin/npm start
+Restart=always
+RestartSec=5
+User=www-data
+Group=www-data
+
+[Install]
+WantedBy=multi-user.target

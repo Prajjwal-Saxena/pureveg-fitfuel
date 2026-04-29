@@ -1,0 +1,26 @@
+<svg width="640" height="420" viewBox="0 0 640 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="640" height="420" rx="28" fill="#FFF8EF"/>
+  <rect x="34" y="40" width="180" height="150" rx="22" fill="#18352D"/>
+  <text x="58" y="82" fill="#FFF8EF" font-size="28" font-family="Arial" font-weight="700">Profile</text>
+  <text x="58" y="118" fill="#C8DDD3" font-size="18" font-family="Arial">Goal</text>
+  <text x="58" y="145" fill="#C8DDD3" font-size="18" font-family="Arial">Weight</text>
+  <text x="58" y="172" fill="#C8DDD3" font-size="18" font-family="Arial">Activity</text>
+  <rect x="246" y="86" width="144" height="64" rx="18" fill="#EF6C2F"/>
+  <text x="281" y="126" fill="#FFF7EF" font-size="22" font-family="Arial" font-weight="700">AI Engine</text>
+  <path d="M214 118H246" stroke="#18352D" stroke-width="8" stroke-linecap="round"/>
+  <path d="M390 118H422" stroke="#18352D" stroke-width="8" stroke-linecap="round"/>
+  <rect x="422" y="40" width="182" height="150" rx="22" fill="#C3F0D6"/>
+  <text x="446" y="82" fill="#18352D" font-size="28" font-family="Arial" font-weight="700">Targets</text>
+  <text x="446" y="118" fill="#18352D" font-size="18" font-family="Arial">2400 kcal</text>
+  <text x="446" y="145" fill="#18352D" font-size="18" font-family="Arial">150g protein</text>
+  <text x="446" y="172" fill="#18352D" font-size="18" font-family="Arial">270g carbs</text>
+  <rect x="58" y="248" width="526" height="118" rx="24" fill="#FFFFFF"/>
+  <rect x="84" y="276" width="114" height="64" rx="18" fill="#FFD3BF"/>
+  <text x="109" y="313" fill="#18352D" font-size="18" font-family="Arial" font-weight="700">Breakfast</text>
+  <rect x="222" y="276" width="114" height="64" rx="18" fill="#C3F0D6"/>
+  <text x="261" y="313" fill="#18352D" font-size="18" font-family="Arial" font-weight="700">Lunch</text>
+  <rect x="360" y="276" width="114" height="64" rx="18" fill="#FFF0B8"/>
+  <text x="397" y="313" fill="#18352D" font-size="18" font-family="Arial" font-weight="700">Snack</text>
+  <rect x="498" y="276" width="60" height="64" rx="18" fill="#18352D"/>
+  <text x="507" y="313" fill="#FFF8EF" font-size="18" font-family="Arial" font-weight="700">Dinner</text>
+</svg>

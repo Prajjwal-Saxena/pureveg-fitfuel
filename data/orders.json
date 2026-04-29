@@ -1,0 +1,36 @@
+[
+  {
+    "id": "FFK-1777215929966-AEBD",
+    "createdAt": "2026-04-26T15:05:29.967Z",
+    "customer": {
+      "name": "Test User",
+      "phone": "9999999999",
+      "address": "Gurgaon"
+    },
+    "notes": "",
+    "paymentMethod": "upi",
+    "summary": {
+      "items": [
+        {
+          "id": "grilled-chicken-quinoa-power-bowl",
+          "name": "Grilled Chicken Quinoa Power Bowl",
+          "price": 399,
+          "quantity": 1,
+          "image": "/assets/meal-plate-template.svg"
+        },
+        {
+          "id": "protein-smoothie",
+          "name": "Protein Smoothie",
+          "price": 249,
+          "quantity": 1,
+          "image": "/assets/meal-plate-template.svg"
+        }
+      ],
+      "subtotal": 648,
+      "deliveryFee": 49,
+      "discount": 259,
+      "total": 438
+    },
+    "paymentStatus": "created"
+  }
+]
