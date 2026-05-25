@@ -67,6 +67,7 @@ export interface BrandPayload {
   deliveryZones: string[];
   supportHours: string;
   whatsapp: string;
+  paymentLink?: string;
   qualityPromises: string[];
 }
 

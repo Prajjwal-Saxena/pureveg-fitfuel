@@ -11,6 +11,7 @@ export function CartDrawer({
   cart,
   quote,
   checkout,
+  paymentLink,
   placingOrder,
   onClose,
   onRemove,
@@ -21,6 +22,7 @@ export function CartDrawer({
   cart: CartItem[];
   quote: QuotePayload | null;
   checkout: CheckoutState;
+  paymentLink?: string;
   placingOrder: boolean;
   onClose: () => void;
   onRemove: (key: string) => void;
@@ -105,6 +107,11 @@ export function CartDrawer({
               </div>
             </div>
           )}
+          {paymentLink ? (
+            <a className="secondary" href={paymentLink} rel="noreferrer" target="_blank">
+              Open Razorpay payment link
+            </a>
+          ) : null}
           <button className="primary" disabled={placingOrder} type="submit">
             {placingOrder ? "Creating order..." : "Proceed to payment"}
           </button>

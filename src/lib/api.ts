@@ -87,6 +87,15 @@ export async function saveAccount(sessionToken: string, account: AccountPayload)
   return asJson<{ ok: true; account: DashboardPayload["account"] }>(response);
 }
 
+export async function trackAnalytics(sessionToken: string, event: string, properties: Record<string, string | number | boolean | null> = {}) {
+  const response = await fetch("/api/analytics/track", {
+    method: "POST",
+    headers: authHeaders(sessionToken),
+    body: JSON.stringify({ event, properties })
+  });
+  return asJson<{ tracked: boolean; reason?: string }>(response);
+}
+
 export async function fetchQuote(items: CartItem[], couponCode: string): Promise<QuotePayload> {
   const response = await fetch("/api/cart/quote", {
     method: "POST",

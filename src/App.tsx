@@ -12,8 +12,10 @@ import {
   generatePlan,
   saveAccount,
   saveProfile,
+  trackAnalytics,
   verifyPayment
 } from "./lib/api";
+import { identifyMixpanel, initMixpanel, trackMixpanel, trackMixpanelPage } from "./lib/mixpanel";
 import { useAppStore } from "./store/useAppStore";
 import { MealCard } from "./components/MealCard";
 import { PlannerSection } from "./components/PlannerSection";
@@ -57,15 +59,26 @@ function AppShell() {
   const { cart, plannerInput, checkout, drawerOpen, sessionToken, setDrawerOpen, setPlannerInput, setCheckout, setSessionToken, hydratePlannerFromProfile, addToCart, removeFromCart, clearCart } =
     useAppStore();
 
+  useEffect(() => {
+    initMixpanel();
+    trackMixpanelPage("FitFuel Home");
+  }, []);
+
   const guestSessionMutation = useMutation({
     mutationFn: createGuestSession,
-    onSuccess: (session) => setSessionToken(session.sessionToken),
+    onSuccess: (session) => {
+      setSessionToken(session.sessionToken);
+      identifyMixpanel(session.sessionToken);
+      trackMixpanel("Guest Session Created", { user_id: session.userId });
+    },
     onError: (error: Error) => toast(error.message)
   });
 
   useEffect(() => {
     if (!sessionToken) {
       guestSessionMutation.mutate();
+    } else {
+      identifyMixpanel(sessionToken);
     }
   }, [sessionToken]);
 
@@ -119,7 +132,25 @@ function AppShell() {
 
   const plannerMutation = useMutation({
     mutationFn: generatePlan,
-    onSuccess: setPlannerResult,
+    onSuccess: async (result) => {
+      setPlannerResult(result);
+      trackMixpanel("AI Plan Generated", {
+        goal: plannerInput.goal,
+        activity: plannerInput.activity,
+        budget_level: plannerInput.budgetLevel,
+        meals: result.schedule.length,
+        calories: result.targets.calories
+      });
+      if (sessionToken) {
+        await trackAnalytics(sessionToken, "AI Plan Generated", {
+          goal: plannerInput.goal,
+          activity: plannerInput.activity,
+          budget_level: plannerInput.budgetLevel,
+          meals: result.schedule.length,
+          calories: result.targets.calories
+        }).catch(() => null);
+      }
+    },
     onError: (error: Error) => toast(error.message)
   });
 
@@ -132,6 +163,18 @@ function AppShell() {
         queryClientInstance.invalidateQueries({ queryKey: ["dashboard", sessionToken] }),
         queryClientInstance.invalidateQueries({ queryKey: ["personalized", sessionToken] })
       ]);
+      trackMixpanel("Profile Saved", {
+        goal: result.profile.goal,
+        segment: result.profile.userSegment,
+        budget_level: result.profile.budgetLevel
+      });
+      if (sessionToken) {
+        await trackAnalytics(sessionToken, "Profile Saved", {
+          goal: result.profile.goal,
+          segment: result.profile.userSegment,
+          budget_level: result.profile.budgetLevel
+        }).catch(() => null);
+      }
       toast("Profile saved");
     },
     onError: (error: Error) => toast(error.message)
@@ -139,8 +182,18 @@ function AppShell() {
 
   const saveAccountMutation = useMutation({
     mutationFn: (account: AccountPayload) => saveAccount(sessionToken, account),
-    onSuccess: async () => {
+    onSuccess: async (result) => {
       await queryClientInstance.invalidateQueries({ queryKey: ["dashboard", sessionToken] });
+      trackMixpanel("Account Saved", {
+        has_email: Boolean(result.account.email),
+        has_phone: Boolean(result.account.phone)
+      });
+      if (sessionToken) {
+        await trackAnalytics(sessionToken, "Account Saved", {
+          has_email: Boolean(result.account.email),
+          has_phone: Boolean(result.account.phone)
+        }).catch(() => null);
+      }
       toast("Account details saved");
     },
     onError: (error: Error) => toast(error.message)
@@ -165,6 +218,18 @@ function AppShell() {
 
   function handleAddToCart(cartItem: CartItem, itemName: string) {
     addToCart(cartItem);
+    trackMixpanel("Added To Cart", {
+      item_name: itemName,
+      price: cartItem.price,
+      quantity: cartItem.quantity
+    });
+    if (sessionToken) {
+      void trackAnalytics(sessionToken, "Added To Cart", {
+        item_name: itemName,
+        price: cartItem.price,
+        quantity: cartItem.quantity
+      }).catch(() => null);
+    }
     toast(`${itemName} added to cart`);
   }
 
@@ -181,6 +246,17 @@ function AppShell() {
     }
 
     setPlacingOrder(true);
+    trackMixpanel("Checkout Started", {
+      cart_items: cart.length,
+      payment_method: checkout.paymentMethod
+    });
+    if (sessionToken) {
+      await trackAnalytics(sessionToken, "Checkout Started", {
+        cart_items: cart.length,
+        payment_method: checkout.paymentMethod
+      }).catch(() => null);
+    }
+
     try {
       const payload = await createCheckoutOrder(cart, { ...checkout, sessionToken });
       if (payload.payment.mode === "razorpay") {
@@ -202,6 +278,18 @@ function AppShell() {
             clearCart();
             setDrawerOpen(false);
             await queryClientInstance.invalidateQueries({ queryKey: ["dashboard", sessionToken] });
+            trackMixpanel("Payment Confirmed", {
+              order_number: payload.order.orderNumber,
+              total: payload.order.quote.total,
+              payment_mode: payload.payment.mode
+            });
+            if (sessionToken) {
+              await trackAnalytics(sessionToken, "Payment Confirmed", {
+                order_number: payload.order.orderNumber,
+                total: payload.order.quote.total,
+                payment_mode: payload.payment.mode
+              }).catch(() => null);
+            }
             toast(`Payment confirmed. Order ${payload.order.orderNumber} is live.`);
           },
           prefill: {
@@ -217,6 +305,16 @@ function AppShell() {
         clearCart();
         setDrawerOpen(false);
         await queryClientInstance.invalidateQueries({ queryKey: ["dashboard", sessionToken] });
+        trackMixpanel("COD Order Created", {
+          order_number: payload.order.orderNumber,
+          total: payload.order.quote.total
+        });
+        if (sessionToken) {
+          await trackAnalytics(sessionToken, "COD Order Created", {
+            order_number: payload.order.orderNumber,
+            total: payload.order.quote.total
+          }).catch(() => null);
+        }
         toast(`${payload.payment.displayMessage} Order ${payload.order.orderNumber} created.`);
       }
     } catch (error) {
@@ -401,6 +499,7 @@ function AppShell() {
         cart={cart}
         quote={quoteQuery.data ?? null}
         checkout={checkout}
+        paymentLink={catalogQuery.data.brand.paymentLink}
         placingOrder={placingOrder}
         onClose={() => setDrawerOpen(false)}
         onRemove={removeFromCart}

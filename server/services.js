@@ -191,6 +191,7 @@ export function getCatalogPayload() {
       deliveryZones: ["Gurgaon", "South Delhi", "Noida"],
       supportHours: "8 AM - 10 PM",
       whatsapp: "+91-XXXXX-XXXXX",
+      paymentLink: process.env.RAZORPAY_PAYMENT_LINK || "",
       qualityPromises: [
         "Monthly macro testing with a +/-5% tolerance goal",
         "4-hour freshness windows",
