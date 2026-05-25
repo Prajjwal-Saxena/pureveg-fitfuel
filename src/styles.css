@@ -57,6 +57,8 @@ textarea {
 .topbar,
 .hero,
 .benefits,
+.dashboard-panel,
+.personalized-panel,
 .planner-panel,
 .menu-panel,
 .infographics,
@@ -152,6 +154,8 @@ textarea {
 
 .hero,
 .planner-panel,
+.dashboard-panel,
+.personalized-panel,
 .menu-panel,
 .plans {
   border-radius: 34px;
@@ -322,9 +326,21 @@ textarea {
   font-weight: 700;
 }
 
-.planner-form label:last-of-type,
-.planner-form button {
+.planner-span,
+.planner-actions {
   grid-column: span 2;
+}
+
+.planner-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.planner-actions .primary,
+.planner-actions .secondary {
+  flex: 1 1 220px;
 }
 
 .planner-form input,
@@ -353,6 +369,82 @@ textarea {
 .schedule {
   display: grid;
   gap: 12px;
+}
+
+.dashboard-grid,
+.recent-orders {
+  display: grid;
+  gap: 18px;
+}
+
+.dashboard-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(320px, 0.8fr);
+  gap: 22px;
+  margin-top: 18px;
+}
+
+.dashboard-summary,
+.personalized-group {
+  display: grid;
+  gap: 18px;
+}
+
+.dashboard-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.recent-orders {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.placeholder-card.compact {
+  padding: 16px 18px;
+}
+
+.account-card {
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+  border-radius: 24px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.account-card label {
+  display: grid;
+  gap: 8px;
+  font-weight: 700;
+}
+
+.account-card input {
+  width: 100%;
+  border: 1px solid rgba(23, 56, 47, 0.12);
+  background: rgba(255, 255, 255, 0.94);
+  border-radius: 16px;
+  padding: 13px 14px;
+}
+
+.account-header,
+.personalized-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.personalized-panel {
+  border-radius: 34px;
+}
+
+.compact-grid {
+  margin-top: 0;
+}
+
+.macro-tags.subtle span {
+  background: rgba(239, 108, 47, 0.1);
+  color: var(--accent-dark);
 }
 
 .menu-header {
@@ -532,15 +624,19 @@ textarea {
 @media (max-width: 1120px) {
   .hero,
   .planner-grid,
+  .dashboard-layout,
   .menu-grid,
   .plan-grid,
+  .dashboard-grid,
+  .recent-orders,
   .infographics,
   .benefits {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .hero,
-  .planner-grid {
+  .planner-grid,
+  .dashboard-layout {
     grid-template-columns: 1fr;
   }
 }
@@ -568,14 +664,16 @@ textarea {
   .benefits,
   .planner-form,
   .target-grid,
+  .dashboard-grid,
+  .recent-orders,
   .menu-grid,
   .infographics,
   .plan-grid {
     grid-template-columns: 1fr;
   }
 
-  .planner-form label:last-of-type,
-  .planner-form button {
+  .planner-span,
+  .planner-actions {
     grid-column: span 1;
   }
 

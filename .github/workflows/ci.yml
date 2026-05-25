@@ -33,7 +33,6 @@ jobs:
           FRONTEND_URL=http://127.0.0.1:5173
           DB_PATH=./data/fitfuel.db
           ADMIN_API_KEY=ci-admin-key
-          NODE_ENV=production
           EOF
 
       - name: Check environment

@@ -14,6 +14,13 @@ fs.mkdirSync(path.dirname(dbPath), { recursive: true });
 export const db = new Database(dbPath);
 db.pragma("journal_mode = WAL");
 
+function ensureColumn(tableName, columnName, columnDefinition) {
+  const columns = db.prepare(`PRAGMA table_info(${tableName})`).all();
+  if (!columns.some((column) => column.name === columnName)) {
+    db.exec(`ALTER TABLE ${tableName} ADD COLUMN ${columnName} ${columnDefinition}`);
+  }
+}
+
 db.exec(`
   CREATE TABLE IF NOT EXISTS menu_items (
     id TEXT PRIMARY KEY,
@@ -55,7 +62,40 @@ db.exec(`
     created_at TEXT NOT NULL,
     updated_at TEXT NOT NULL
   );
+
+  CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_token TEXT NOT NULL UNIQUE,
+    auth_provider TEXT NOT NULL,
+    auth_subject TEXT,
+    display_name TEXT,
+    email TEXT,
+    phone TEXT,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL
+  );
+
+  CREATE TABLE IF NOT EXISTS user_profiles (
+    user_id INTEGER PRIMARY KEY,
+    age INTEGER,
+    weight REAL,
+    height_feet INTEGER,
+    height_inches INTEGER,
+    gender TEXT,
+    goal TEXT,
+    activity TEXT,
+    allergies TEXT,
+    dietary_preference TEXT,
+    budget_level TEXT,
+    medical_conditions_json TEXT,
+    user_segment TEXT,
+    onboarding_completed INTEGER NOT NULL DEFAULT 0,
+    updated_at TEXT NOT NULL,
+      FOREIGN KEY (user_id) REFERENCES users(id)
+  );
 `);
+
+ensureColumn("orders", "user_id", "INTEGER");
 
 function seedTable(tableName, rows, keyField) {
   const count = db.prepare(`SELECT COUNT(*) as count FROM ${tableName}`).get().count;
