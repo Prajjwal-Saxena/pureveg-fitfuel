@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { AccountPayload, DashboardPayload } from "../types";
+import type { AccountPayload, DashboardPayload, IntegrationStatus } from "../types";
 
 const money = new Intl.NumberFormat("en-IN", {
   style: "currency",
@@ -7,12 +7,26 @@ const money = new Intl.NumberFormat("en-IN", {
   maximumFractionDigits: 0
 });
 
+const integrationLabels: Array<{ key: keyof IntegrationStatus; label: string }> = [
+  { key: "mixpanel", label: "Mixpanel" },
+  { key: "openai", label: "OpenAI" },
+  { key: "pinecone", label: "Pinecone" },
+  { key: "firebase", label: "Firebase" },
+  { key: "stripe", label: "Stripe" },
+  { key: "razorpay", label: "Razorpay" },
+  { key: "twilio", label: "Twilio" },
+  { key: "n8n", label: "n8n" },
+  { key: "aws", label: "AWS" }
+];
+
 export function DashboardSection({
   dashboard,
+  integrations,
   onSaveAccount,
   savingAccount
 }: {
   dashboard: DashboardPayload | null;
+  integrations: IntegrationStatus | null;
   onSaveAccount: (account: AccountPayload) => void;
   savingAccount: boolean;
 }) {
@@ -48,7 +62,7 @@ export function DashboardSection({
       <div className="section-copy">
         <span className="pill">Profile dashboard</span>
         <h3>Your FitFuel identity is becoming a real nutrition operating layer</h3>
-        <p>Orders are now tied to your user identity, and your account details can drive checkout, retention, and personalized recommendations.</p>
+        <p>Orders are now tied to your user identity, and your account details can drive checkout, retention, personalized recommendations, and integration readiness.</p>
       </div>
 
       <div className="dashboard-layout">
@@ -89,6 +103,23 @@ export function DashboardSection({
               </div>
             )}
           </div>
+
+          {integrations ? (
+            <div className="integration-card">
+              <div className="account-header">
+                <span className="pill">Integrations</span>
+                <small>Live readiness snapshot</small>
+              </div>
+              <div className="integration-grid">
+                {integrationLabels.map((integration) => (
+                  <div className={`integration-chip ${integrations[integration.key] ? "ready" : "pending"}`} key={integration.key}>
+                    <span>{integration.label}</span>
+                    <strong>{integrations[integration.key] ? "Ready" : "Pending"}</strong>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : null}
         </div>
 
         <form

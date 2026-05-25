@@ -434,6 +434,40 @@ textarea {
   flex-wrap: wrap;
 }
 
+.integration-card {
+  display: grid;
+  gap: 16px;
+  padding: 18px;
+  border-radius: 24px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.integration-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.integration-chip {
+  display: grid;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: rgba(23, 56, 47, 0.04);
+}
+
+.integration-chip.ready {
+  background: rgba(31, 122, 78, 0.12);
+  border-color: rgba(31, 122, 78, 0.18);
+}
+
+.integration-chip.pending {
+  background: rgba(239, 108, 47, 0.08);
+  border-color: rgba(239, 108, 47, 0.16);
+}
+
 .personalized-panel {
   border-radius: 34px;
 }
@@ -628,6 +662,7 @@ textarea {
   .menu-grid,
   .plan-grid,
   .dashboard-grid,
+  .integration-grid,
   .recent-orders,
   .infographics,
   .benefits {
@@ -665,6 +700,7 @@ textarea {
   .planner-form,
   .target-grid,
   .dashboard-grid,
+  .integration-grid,
   .recent-orders,
   .menu-grid,
   .infographics,

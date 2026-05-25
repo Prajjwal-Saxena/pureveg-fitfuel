@@ -5,6 +5,7 @@ import type {
   CheckoutState,
   DashboardPayload,
   GuestSession,
+  HealthPayload,
   PersonalizedCatalogPayload,
   PlannerInputState,
   PlannerResult,
@@ -31,6 +32,11 @@ function authHeaders(sessionToken: string) {
 export async function fetchCatalog(): Promise<CatalogPayload> {
   const response = await fetch("/api/menu");
   return asJson<CatalogPayload>(response);
+}
+
+export async function fetchHealth(): Promise<HealthPayload> {
+  const response = await fetch("/api/health");
+  return asJson<HealthPayload>(response);
 }
 
 export async function createGuestSession(): Promise<GuestSession> {

@@ -163,6 +163,19 @@ export interface GuestSession {
   displayName: string;
 }
 
+export interface IntegrationStatus {
+  openai: boolean;
+  langchain: boolean;
+  pinecone: boolean;
+  mixpanel: boolean;
+  twilio: boolean;
+  stripe: boolean;
+  razorpay: boolean;
+  firebase: boolean;
+  n8n: boolean;
+  aws: boolean;
+}
+
 export interface UserProfileResponse {
   user: {
     id: number;
@@ -211,4 +224,11 @@ export interface PersonalizedCatalogPayload {
     conditionSupport: MenuItem[];
     quickMeals: MenuItem[];
   };
+}
+
+export interface HealthPayload {
+  ok: boolean;
+  service: string;
+  time: string;
+  integrations: IntegrationStatus;
 }

@@ -6,6 +6,7 @@ import {
   createGuestSession,
   fetchCatalog,
   fetchDashboard,
+  fetchHealth,
   fetchPersonalizedCatalog,
   fetchProfile,
   fetchQuote,
@@ -60,16 +61,16 @@ function AppShell() {
     useAppStore();
 
   useEffect(() => {
-    initMixpanel();
-    trackMixpanelPage("FitFuel Home");
+    void initMixpanel();
+    void trackMixpanelPage("FitFuel Home");
   }, []);
 
   const guestSessionMutation = useMutation({
     mutationFn: createGuestSession,
     onSuccess: (session) => {
       setSessionToken(session.sessionToken);
-      identifyMixpanel(session.sessionToken);
-      trackMixpanel("Guest Session Created", { user_id: session.userId });
+      void identifyMixpanel(session.sessionToken);
+      void trackMixpanel("Guest Session Created", { user_id: session.userId });
     },
     onError: (error: Error) => toast(error.message)
   });
@@ -78,13 +79,18 @@ function AppShell() {
     if (!sessionToken) {
       guestSessionMutation.mutate();
     } else {
-      identifyMixpanel(sessionToken);
+      void identifyMixpanel(sessionToken);
     }
   }, [sessionToken]);
 
   const catalogQuery = useQuery({
     queryKey: ["catalog"],
     queryFn: fetchCatalog
+  });
+
+  const healthQuery = useQuery({
+    queryKey: ["health"],
+    queryFn: fetchHealth
   });
 
   const profileQuery = useQuery({
@@ -134,7 +140,7 @@ function AppShell() {
     mutationFn: generatePlan,
     onSuccess: async (result) => {
       setPlannerResult(result);
-      trackMixpanel("AI Plan Generated", {
+      await trackMixpanel("AI Plan Generated", {
         goal: plannerInput.goal,
         activity: plannerInput.activity,
         budget_level: plannerInput.budgetLevel,
@@ -163,7 +169,7 @@ function AppShell() {
         queryClientInstance.invalidateQueries({ queryKey: ["dashboard", sessionToken] }),
         queryClientInstance.invalidateQueries({ queryKey: ["personalized", sessionToken] })
       ]);
-      trackMixpanel("Profile Saved", {
+      await trackMixpanel("Profile Saved", {
         goal: result.profile.goal,
         segment: result.profile.userSegment,
         budget_level: result.profile.budgetLevel
@@ -184,7 +190,7 @@ function AppShell() {
     mutationFn: (account: AccountPayload) => saveAccount(sessionToken, account),
     onSuccess: async (result) => {
       await queryClientInstance.invalidateQueries({ queryKey: ["dashboard", sessionToken] });
-      trackMixpanel("Account Saved", {
+      await trackMixpanel("Account Saved", {
         has_email: Boolean(result.account.email),
         has_phone: Boolean(result.account.phone)
       });
@@ -218,7 +224,7 @@ function AppShell() {
 
   function handleAddToCart(cartItem: CartItem, itemName: string) {
     addToCart(cartItem);
-    trackMixpanel("Added To Cart", {
+    void trackMixpanel("Added To Cart", {
       item_name: itemName,
       price: cartItem.price,
       quantity: cartItem.quantity
@@ -246,7 +252,7 @@ function AppShell() {
     }
 
     setPlacingOrder(true);
-    trackMixpanel("Checkout Started", {
+    void trackMixpanel("Checkout Started", {
       cart_items: cart.length,
       payment_method: checkout.paymentMethod
     });
@@ -278,7 +284,7 @@ function AppShell() {
             clearCart();
             setDrawerOpen(false);
             await queryClientInstance.invalidateQueries({ queryKey: ["dashboard", sessionToken] });
-            trackMixpanel("Payment Confirmed", {
+            await trackMixpanel("Payment Confirmed", {
               order_number: payload.order.orderNumber,
               total: payload.order.quote.total,
               payment_mode: payload.payment.mode
@@ -305,7 +311,7 @@ function AppShell() {
         clearCart();
         setDrawerOpen(false);
         await queryClientInstance.invalidateQueries({ queryKey: ["dashboard", sessionToken] });
-        trackMixpanel("COD Order Created", {
+        await trackMixpanel("COD Order Created", {
           order_number: payload.order.orderNumber,
           total: payload.order.quote.total
         });
@@ -418,6 +424,7 @@ function AppShell() {
 
         <DashboardSection
           dashboard={dashboardQuery.data ?? null}
+          integrations={healthQuery.data?.integrations ?? null}
           onSaveAccount={(account) => saveAccountMutation.mutate(account)}
           savingAccount={saveAccountMutation.isPending}
         />
